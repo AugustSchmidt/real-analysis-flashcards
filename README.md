@@ -59,7 +59,7 @@ An interactive web-based flashcard application for studying Real Analysis concep
 ### Architecture
 - **Single File Application**: Entirely self-contained HTML file
 - **Client-Side Only**: No server required, runs completely in browser
-- 
+  
 ### Mathematical Content
 All mathematical expressions use LaTeX syntax and are rendered by MathJax:
 - Inline math: `$expression$`
@@ -72,12 +72,6 @@ Real Analysis Flashcards/
 ├── real-analysis-flashcards.html    # Main application file
 └── README.md                        # This documentation
 ```
-
-## Browser Compatibility
-- Chrome 60+
-- Firefox 60+  
-- Safari 12+
-- Edge 79+
 
 ## Contributing
 
