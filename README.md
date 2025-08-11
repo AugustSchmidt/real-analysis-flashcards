@@ -19,12 +19,6 @@ An interactive web-based flashcard application for studying Real Analysis concep
 - **Shuffle Mode**: Randomize card order for varied practice
 - **Navigation Controls**: Previous/Next buttons with progress indicator
 
-### 🌙 Modern Interface
-- **Dark Mode**: Toggle between light and dark themes for comfortable studying
-- **Responsive Design**: Works on desktop and mobile devices
-- **Mathematical Notation**: Full LaTeX support via MathJax for complex formulas
-- **Clean UI**: Tailwind CSS styling with intuitive controls
-
 ## Getting Started
 
 ### Prerequisites
@@ -65,9 +59,7 @@ An interactive web-based flashcard application for studying Real Analysis concep
 ### Architecture
 - **Single File Application**: Entirely self-contained HTML file
 - **Client-Side Only**: No server required, runs completely in browser
-- **CDN Dependencies**: All libraries loaded from reliable CDNs
-- **State Management**: React hooks for local state management
-
+- 
 ### Mathematical Content
 All mathematical expressions use LaTeX syntax and are rendered by MathJax:
 - Inline math: `$expression$`
@@ -98,14 +90,7 @@ This is a personal study tool, but suggestions for improvements are welcome:
 
 ## License
 
-This project is created for educational purposes. Mathematical content is based on standard Real Analysis textbooks and theorems.
-
-## Acknowledgments
-
-- Content based on standard Real Analysis curriculum
-- Icons using Unicode characters for simplicity
-- Responsive design patterns from Tailwind CSS
-- Mathematical rendering powered by MathJax
+This project is created for educational purposes. Mathematical content is based on Real Analysis: Modern Techniques and Their Applications (Second Edition) by Gerald B. Folland.
 
 ---
 
