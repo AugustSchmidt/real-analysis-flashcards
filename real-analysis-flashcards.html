@@ -663,6 +663,9 @@
                 const [isShuffled, setIsShuffled] = useState(false);
                 const [shuffledIndices, setShuffledIndices] = useState([]);
                 const [isDarkMode, setIsDarkMode] = useState(true);
+                const [reviewMode, setReviewMode] = useState(false);
+                const [showReviewPrompt, setShowReviewPrompt] = useState(false);
+                const [deckCompleted, setDeckCompleted] = useState(false);
 
                 const categories = Object.keys(categoryColors);
 
@@ -706,6 +709,9 @@
                     setShowAnswer(false);
                     setIsShuffled(false);
                     setShuffledIndices([]);
+                    setReviewMode(false);
+                    setShowReviewPrompt(false);
+                    setDeckCompleted(false);
                 }, [selectedCategories]);
 
                 // Fisher-Yates shuffle algorithm
@@ -726,6 +732,13 @@
                     if (currentIndex < filteredCards.length - 1) {
                         setCurrentIndex(currentIndex + 1);
                         setShowAnswer(false);
+                    } else {
+                        // Reached end of deck
+                        setDeckCompleted(true);
+                        const incorrectCards = getIncorrectCards();
+                        if (incorrectCards.length > 0 && !reviewMode) {
+                            setShowReviewPrompt(true);
+                        }
                     }
                 };
 
@@ -741,6 +754,8 @@
                     setShowAnswer(false);
                     setIsShuffled(false);
                     setShuffledIndices([]);
+                    setDeckCompleted(false);
+                    setShowReviewPrompt(false);
                 };
 
                 const shuffleDeck = () => {
@@ -781,6 +796,37 @@
                     const correct = Object.values(progress).filter(Boolean).length;
                     const total = Object.keys(progress).length;
                     return { correct, total };
+                };
+
+                const getIncorrectCards = () => {
+                    return flashcardsData.filter(card => 
+                        selectedCategories.has(card.category) && 
+                        progress[card.id] === false
+                    );
+                };
+
+                const startReviewMode = () => {
+                    const incorrectCards = getIncorrectCards();
+                    setFilteredCards(incorrectCards);
+                    setReviewMode(true);
+                    setShowReviewPrompt(false);
+                    setCurrentIndex(0);
+                    setShowAnswer(false);
+                    setDeckCompleted(false);
+                    setIsShuffled(false);
+                    setShuffledIndices([]);
+                };
+
+                const exitReviewMode = () => {
+                    const filtered = flashcardsData.filter(card => selectedCategories.has(card.category));
+                    setFilteredCards(filtered);
+                    setReviewMode(false);
+                    setShowReviewPrompt(false);
+                    setCurrentIndex(0);
+                    setShowAnswer(false);
+                    setDeckCompleted(false);
+                    setIsShuffled(false);
+                    setShuffledIndices([]);
                 };
 
                 const formatText = (text) => {
@@ -978,8 +1024,13 @@
                 return React.createElement('div', { className: `max-w-4xl mx-auto p-6 min-h-screen ${themeClasses.body}` },
                     React.createElement('div', { className: "mb-6" },
                         React.createElement('div', { className: "flex justify-between items-center mb-4" },
-                            React.createElement('h1', { className: `text-3xl font-bold ${themeClasses.text.primary} text-center flex-1` },
-                                "Real Analysis Flashcards"
+                            React.createElement('div', { className: "flex-1" },
+                                React.createElement('h1', { className: `text-3xl font-bold ${themeClasses.text.primary} text-center` },
+                                    "Real Analysis Flashcards"
+                                ),
+                                reviewMode && React.createElement('div', { className: `text-center text-sm ${themeClasses.text.secondary} mt-1` },
+                                    "📝 Review Mode - Incorrect Cards Only"
+                                )
                             ),
                             React.createElement('button', {
                                 onClick: toggleDarkMode,
@@ -1016,12 +1067,26 @@
                                 isShuffled && React.createElement('span', { className: `ml-2 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}` }, "(Shuffled)")
                             ),
                             React.createElement('div', { className: "flex items-center gap-2" },
-                                React.createElement('button', {
+                                !reviewMode && React.createElement('button', {
                                     onClick: shuffleDeck,
                                     className: `flex items-center gap-2 px-3 py-1 ${themeClasses.button.purple} text-white rounded-lg text-sm transition-colors`
                                 },
                                     React.createElement(Shuffle, { size: 16 }),
                                     "Shuffle"
+                                ),
+                                !reviewMode && getIncorrectCards().length > 0 && React.createElement('button', {
+                                    onClick: startReviewMode,
+                                    className: `flex items-center gap-2 px-3 py-1 ${themeClasses.button.red} ${isDarkMode ? 'text-red-300' : 'text-red-600'} rounded-lg text-sm transition-colors`
+                                },
+                                    React.createElement('span', null, '📝'),
+                                    "Review Wrong"
+                                ),
+                                reviewMode && React.createElement('button', {
+                                    onClick: exitReviewMode,
+                                    className: `flex items-center gap-2 px-3 py-1 ${themeClasses.button.secondary} rounded-lg text-sm ${themeClasses.text.primary}`
+                                },
+                                    React.createElement('span', null, '←'),
+                                    "Exit Review"
                                 ),
                                 React.createElement('button', {
                                     onClick: () => setShowProgress(!showProgress),
@@ -1148,6 +1213,34 @@
                     // Stats Footer
                     React.createElement('div', { className: `mt-4 text-center text-sm ${themeClasses.text.secondary}` },
                         `Total Cards: ${flashcardsData.length} | Filtered: ${filteredCards.length}`
+                    ),
+
+                    // Review Prompt Modal
+                    showReviewPrompt && React.createElement('div', { 
+                        className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50",
+                        onClick: () => setShowReviewPrompt(false)
+                    },
+                        React.createElement('div', { 
+                            className: `${themeClasses.card} p-8 rounded-lg shadow-xl max-w-md mx-4`,
+                            onClick: (e) => e.stopPropagation()
+                        },
+                            React.createElement('h2', { className: `text-2xl font-bold ${themeClasses.text.primary} mb-4 text-center` },
+                                "🎉 Deck Complete!"
+                            ),
+                            React.createElement('div', { className: `${themeClasses.text.secondary} mb-6 text-center` },
+                                `You got ${getIncorrectCards().length} cards wrong. Would you like to review them?`
+                            ),
+                            React.createElement('div', { className: "flex gap-3 justify-center" },
+                                React.createElement('button', {
+                                    onClick: () => setShowReviewPrompt(false),
+                                    className: `px-4 py-2 ${themeClasses.button.secondary} rounded-lg ${themeClasses.text.primary} transition-colors`
+                                }, "Skip"),
+                                React.createElement('button', {
+                                    onClick: startReviewMode,
+                                    className: `px-4 py-2 ${themeClasses.button.primary} text-white rounded-lg transition-colors`
+                                }, "Review Wrong Cards")
+                            )
+                        )
                     )
                 );
             }
