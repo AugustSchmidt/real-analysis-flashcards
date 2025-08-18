@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Analysis Flashcards</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -50,6 +51,60 @@
             border: 1px solid red;
             border-radius: 5px;
             background-color: #fee;
+        }
+        
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .confetti {
+            position: absolute;
+            font-size: 20px;
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        .confetti-explode {
+            animation-duration: 2.5s;
+            animation-timing-function: ease-out;
+            animation-fill-mode: forwards;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+        }
+        
+        
+        .confetti-bounce {
+            animation: bounce 0.6s ease-in-out infinite;
+        }
+        
+        .confetti-pulse {
+            animation: pulse 1s ease-in-out infinite;
         }
     </style>
 </head>
@@ -666,6 +721,7 @@
                 const [reviewMode, setReviewMode] = useState(false);
                 const [showReviewPrompt, setShowReviewPrompt] = useState(false);
                 const [deckCompleted, setDeckCompleted] = useState(false);
+                const [showCelebration, setShowCelebration] = useState(false);
 
                 const categories = Object.keys(categoryColors);
 
@@ -712,6 +768,7 @@
                     setReviewMode(false);
                     setShowReviewPrompt(false);
                     setDeckCompleted(false);
+                    setShowCelebration(false);
                 }, [selectedCategories]);
 
                 // Fisher-Yates shuffle algorithm
@@ -735,9 +792,14 @@
                     } else {
                         // Reached end of deck
                         setDeckCompleted(true);
+                        triggerCelebration(); // 🎉 Trigger celebration animation!
+                        
                         const incorrectCards = getIncorrectCards();
                         if (incorrectCards.length > 0 && !reviewMode) {
-                            setShowReviewPrompt(true);
+                            // Delay showing the review prompt to let celebration play
+                            setTimeout(() => {
+                                setShowReviewPrompt(true);
+                            }, 1500);
                         }
                     }
                 };
@@ -756,6 +818,7 @@
                     setShuffledIndices([]);
                     setDeckCompleted(false);
                     setShowReviewPrompt(false);
+                    setShowCelebration(false);
                 };
 
                 const shuffleDeck = () => {
@@ -827,6 +890,134 @@
                     setDeckCompleted(false);
                     setIsShuffled(false);
                     setShuffledIndices([]);
+                };
+
+                const triggerCelebration = () => {
+                    setShowCelebration(true);
+                    // Hide celebration after 4 seconds
+                    setTimeout(() => {
+                        setShowCelebration(false);
+                    }, 4000);
+                };
+
+                const createConfetti = () => {
+                    const confettiElements = [];
+                    const confettiEmojis = ['🎉', '🎊', '⭐', '✨', '🌟', '💫', '🎈', '🎆', '🎇', '🌈', '🎁', '🍾', '🥳', '🌺', '🦄', '🎀'];
+                    
+                    // Create explosive burst from center
+                    for (let i = 0; i < 80; i++) {
+                        const delay = Math.random() * 800;
+                        const angle = (Math.PI * 2 * i) / 80 + Math.random() * 0.5;
+                        const velocity = 300 + Math.random() * 400;
+                        const endX = Math.cos(angle) * velocity;
+                        const endY = Math.sin(angle) * velocity;
+                        
+                        const emoji = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
+                        const size = 20 + Math.random() * 15;
+                        
+                        // Create unique keyframes for each confetti piece
+                        const animationName = `explode-${i}`;
+                        const keyframes = `
+                            @keyframes ${animationName} {
+                                0% {
+                                    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                                    opacity: 1;
+                                }
+                                15% {
+                                    transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
+                                    opacity: 1;
+                                }
+                                100% {
+                                    transform: translate(calc(-50% + ${endX}px), calc(-50% + ${endY}px)) scale(0.3) rotate(720deg);
+                                    opacity: 0;
+                                }
+                            }
+                        `;
+                        
+                        // Add keyframes to document
+                        if (!document.getElementById(`style-${animationName}`)) {
+                            const style = document.createElement('style');
+                            style.id = `style-${animationName}`;
+                            style.textContent = keyframes;
+                            document.head.appendChild(style);
+                        }
+                        
+                        confettiElements.push(
+                            React.createElement('div', {
+                                key: i,
+                                className: 'confetti',
+                                style: {
+                                    left: '50%',
+                                    top: '50%',
+                                    fontSize: `${size}px`,
+                                    animation: `${animationName} 2.5s ease-out forwards`,
+                                    animationDelay: `${delay}ms`
+                                }
+                            }, emoji)
+                        );
+                    }
+                    
+                    // Add secondary bursts from corners
+                    const burstPoints = [
+                        { x: '20%', y: '20%' },
+                        { x: '80%', y: '20%' },
+                        { x: '20%', y: '80%' },
+                        { x: '80%', y: '80%' }
+                    ];
+                    
+                    burstPoints.forEach((point, pointIndex) => {
+                        for (let i = 0; i < 15; i++) {
+                            const delay = 600 + Math.random() * 1000;
+                            const angle = Math.random() * Math.PI * 2;
+                            const velocity = 150 + Math.random() * 250;
+                            const endX = Math.cos(angle) * velocity;
+                            const endY = Math.sin(angle) * velocity;
+                            
+                            const emoji = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
+                            const size = 15 + Math.random() * 10;
+                            
+                            const animationName = `burst-${pointIndex}-${i}`;
+                            const keyframes = `
+                                @keyframes ${animationName} {
+                                    0% {
+                                        transform: scale(0) rotate(0deg);
+                                        opacity: 1;
+                                    }
+                                    20% {
+                                        transform: scale(1.1) rotate(180deg);
+                                        opacity: 1;
+                                    }
+                                    100% {
+                                        transform: translate(${endX}px, ${endY}px) scale(0.2) rotate(540deg);
+                                        opacity: 0;
+                                    }
+                                }
+                            `;
+                            
+                            if (!document.getElementById(`style-${animationName}`)) {
+                                const style = document.createElement('style');
+                                style.id = `style-${animationName}`;
+                                style.textContent = keyframes;
+                                document.head.appendChild(style);
+                            }
+                            
+                            confettiElements.push(
+                                React.createElement('div', {
+                                    key: `burst-${pointIndex}-${i}`,
+                                    className: 'confetti',
+                                    style: {
+                                        left: point.x,
+                                        top: point.y,
+                                        fontSize: `${size}px`,
+                                        animation: `${animationName} 2s ease-out forwards`,
+                                        animationDelay: `${delay}ms`
+                                    }
+                                }, emoji)
+                            );
+                        }
+                    });
+                    
+                    return confettiElements;
                 };
 
                 const formatText = (text) => {
@@ -1190,14 +1381,32 @@
                             "Reset"
                         ),
 
-                        React.createElement('button', {
-                            onClick: nextCard,
-                            disabled: currentIndex === filteredCards.length - 1,
-                            className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.nav} text-white rounded-lg disabled:${isDarkMode ? 'bg-gray-800' : 'bg-gray-300'} disabled:cursor-not-allowed transition-colors`
-                        },
-                            "Next",
-                            React.createElement(ChevronRight, { size: 20 })
-                        )
+                        currentIndex === filteredCards.length - 1 
+                            ? React.createElement('button', {
+                                onClick: () => {
+                                    // Trigger celebration and completion logic
+                                    setDeckCompleted(true);
+                                    triggerCelebration();
+                                    
+                                    const incorrectCards = getIncorrectCards();
+                                    if (incorrectCards.length > 0 && !reviewMode) {
+                                        setTimeout(() => {
+                                            setShowReviewPrompt(true);
+                                        }, 1500);
+                                    }
+                                },
+                                className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.primary} text-white rounded-lg transition-colors`
+                            },
+                                "Finish Deck 🎉",
+                                React.createElement(Check, { size: 20 })
+                            )
+                            : React.createElement('button', {
+                                onClick: nextCard,
+                                className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.nav} text-white rounded-lg transition-colors`
+                            },
+                                "Next",
+                                React.createElement(ChevronRight, { size: 20 })
+                            )
                     ),
 
                     // Progress Bar
@@ -1214,6 +1423,11 @@
                     React.createElement('div', { className: `mt-4 text-center text-sm ${themeClasses.text.secondary}` },
                         `Total Cards: ${flashcardsData.length} | Filtered: ${filteredCards.length}`
                     ),
+
+                    // Celebration Animation
+                    showCelebration && React.createElement('div', { 
+                        className: "celebration-overlay"
+                    }, createConfetti()),
 
                     // Review Prompt Modal
                     showReviewPrompt && React.createElement('div', { 
