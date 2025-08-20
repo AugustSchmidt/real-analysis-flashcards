@@ -696,6 +696,180 @@
                     category: "Haar and Radon Measures",
                     front: "When is Haar measure both left- and right-invariant?",
                     back: "For **abelian groups** or **compact groups**, Haar measure is both left- and right-invariant.\\n\\n**Examples**:\\n• $\\mathbb{R}^n$ with addition (abelian): Lebesgue measure\\n• $S^1$ with multiplication (compact abelian): arc length measure\\n• $SO(n)$ (compact): normalized Haar measure"
+                },
+                {
+                    id: 114,
+                    category: "Haar and Radon Measures",
+                    front: "Define a positive linear functional on $C_c(X)$.",
+                    back: "Let $X$ be a locally compact Hausdorff (LCH) space, and $C_c(X) = \\{f: X \\to \\mathbb{R} : f \\text{ is continuous and has compact support}\\}$.\\n\\nA linear functional $I: C_c(X) \\to \\mathbb{R}$ is called **positive** if $I(f) \\geq 0$ whenever $f \\geq 0$."
+                },
+                {
+                    id: 115,
+                    category: "Haar and Radon Measures",
+                    front: "State the key property of positive linear functionals on $C_c(X)$.",
+                    back: "**Proposition**: Positive linear functionals are strongly continuous.\\n\\nIf $I$ is a positive linear functional on $C_c(X)$, then for each compact $K \\subset X$, there exists a constant $C_K$ such that:\\n$$|I(f)| \\leq C_K \\|f\\|_u$$\\nfor all $f \\in C_c(X)$ with $\\operatorname{supp}(f) \\subset K$."
+                },
+                {
+                    id: 116,
+                    category: "Haar and Radon Measures",
+                    front: "State the detailed Riesz Representation Theorem for Radon measures.",
+                    back: "**Riesz Representation Theorem**: If $X$ is a locally compact Hausdorff space, then every positive linear functional $I$ on $C_c(X)$ corresponds to a unique Radon measure $\\mu$ such that:\\n$$I(f) = \\int_X f \\, d\\mu$$\\nfor all $f \\in C_c(X)$.\\n\\nMoreover, this establishes a bijection between positive linear functionals on $C_c(X)$ and Radon measures on $X$."
+                },
+                {
+                    id: 117,
+                    category: "Haar and Radon Measures",
+                    front: "State the detailed existence and uniqueness theorems for Haar measure.",
+                    back: "**Existence**: Every locally compact group $G$ admits a left-invariant Haar measure $\\mu$ such that $\\mu(gA) = \\mu(A)$ for all $g \\in G$ and measurable $A$.\\n\\n**Uniqueness**: The Haar measure is unique up to scaling. If $\\mu$ and $\\nu$ are both left-invariant Haar measures on $G$, then $\\exists c > 0$ such that $\\nu = c\\mu$.\\n\\n**Bi-invariance**: For abelian or compact groups, Haar measure is both left- and right-invariant."
+                },
+                {
+                    id: 118,
+                    category: "Haar and Radon Measures",
+                    front: "Define outer regular, inner regular, and regular measures.",
+                    back: "Let $(X, \\mathcal{B}, \\mu)$ be an LCH measure space with Borel $\\sigma$-algebra. For $E \\in \\mathcal{B}$:\\n\\n• $\\mu$ is **outer regular** on $E$ if:\\n$$\\mu(E) = \\inf\\{\\mu(U) : U \\supset E, U \\text{ open}\\}$$\\n\\n• $\\mu$ is **inner regular** on $E$ if:\\n$$\\mu(E) = \\sup\\{\\mu(K) : K \\subset E, K \\text{ compact}\\}$$\\n\\n• $\\mu$ is **regular** if it is both outer and inner regular on all Borel sets."
+                },
+                {
+                    id: 119,
+                    category: "Haar and Radon Measures", 
+                    front: "Define a Radon measure.",
+                    back: "A **Radon measure** on a locally compact Hausdorff space $X$ is a Borel measure that is:\\n\\n• **Finite on compact sets**: $\\mu(K) < \\infty$ for all compact $K \\subset X$\\n\\n• **Outer regular on all Borel sets**: For every $E \\in \\mathcal{B}_X$, $\\mu(E) = \\inf\\{\\mu(U) : U \\supset E, U \\text{ open}\\}$\\n\\n• **Inner regular on all open sets**: For every open $U \\subset X$, $\\mu(U) = \\sup\\{\\mu(K) : K \\subset U, K \\text{ compact}\\}$"
+                },
+                
+                // Complex Measures
+                {
+                    id: 92,
+                    category: "Complex Measures",
+                    front: "Define a complex measure.",
+                    back: "A **complex measure** on a measurable space $(X, \\Sigma)$ is a map $\\nu: \\Sigma \\to \\mathbb{C}$ such that:\\n\\n• $\\nu(\\emptyset) = 0$\\n\\n• If $\\{E_j\\}$ is a sequence of disjoint sets in $\\Sigma$, then $\\nu\\left( \\bigcup_{j=1}^\\infty E_j\\right) = \\sum_{j=1}^\\infty \\nu(E_j)$\\n\\n**Note**: Infinite values are not allowed, so a positive measure is a complex measure $\\Leftrightarrow$ it is finite.\\n\\nIf $\\nu$ is a complex measure, we write $\\nu = \\nu_r + i \\nu_i$ for the real and imaginary parts."
+                },
+                {
+                    id: 93,
+                    category: "Complex Measures",
+                    front: "State the Lebesgue-Radon-Nikodym theorem for complex measures.",
+                    back: "If $\\nu: \\Sigma \\to \\mathbb{C}$ is a complex measure and $\\mu$ is a $\\sigma$-finite positive measure on $(X, \\Sigma)$, then there exists a complex measure $\\lambda$ and $f \\in L^1(\\mu)$ such that:\\n\\n• $\\lambda \\perp \\mu$ (mutually singular)\\n\\n• $d\\nu = d\\lambda + f \\, d\\mu$\\n\\nMoreover, these are **unique**. If $\\lambda' \\perp \\mu$ and $d\\nu = d\\lambda' + f' \\, d\\mu$, then $\\lambda = \\lambda'$ and $f = f'$ $\\mu$-a.e."
+                },
+                {
+                    id: 94,
+                    category: "Complex Measures",
+                    front: "Define the total variation of a complex measure.",
+                    back: "The **total variation** of a complex measure $\\nu: \\Sigma \\to \\mathbb{C}$ is the positive measure $|\\nu|$ determined by the property that if $f = \\frac{d\\nu}{d\\mu}$ where $\\mu$ is a positive measure, then $|f| = \\frac{d|\\nu|}{d\\mu}$."
+                },
+                {
+                    id: 95,
+                    category: "Complex Measures",
+                    front: "State the basic properties of complex measure total variation.",
+                    back: "Let $\\nu$ be a complex measure on $(X, \\Sigma)$. Then:\\n\\n1. $|\\nu(E)| \\leq |\\nu|(E)$ for all $E \\in \\Sigma$\\n\\n2. $\\nu \\ll |\\nu|$, and $d\\nu/d|\\nu|$ has absolute value $1$ $|\\nu|$-a.e.\\n\\n3. $L^1(\\nu) = L^1(|\\nu|)$ and if $f \\in L^1(\\nu)$, then $\\left|\\int f \\, d\\nu\\right| \\leq \\int |f| \\, d|\\nu|$\\n\\n4. If $\\nu_1$ and $\\nu_2$ are complex measures, then $|\\nu_1 + \\nu_2| \\leq |\\nu_1| + |\\nu_2|$"
+                },
+
+                // Additional Signed Measures - Convex Functions
+                {
+                    id: 96,
+                    category: "Signed Measures",
+                    front: "Define a convex function.",
+                    back: "A function $F: (a,b) \\to \\mathbb{R}$ is called **convex** if:\\n$$F(\\lambda s + (1-\\lambda)t) \\leq \\lambda F(s) + (1-\\lambda) F(t)$$\\nfor all $s,t \\in (a,b)$ and $\\lambda \\in (0,1)$.\\n\\n**Geometric interpretation**: The graph of $F$ over the interval from $s$ to $t$ lies underneath the line segment joining $(s, F(s))$ to $(t, F(t))$."
+                },
+                {
+                    id: 97,
+                    category: "Signed Measures",
+                    front: "State Jensen's Inequality.",
+                    back: "If $(X, \\Sigma, \\mu)$ is a measure space with $\\mu(X) = 1$, $g: X \\to (a,b)$ is in $L^1(\\mu)$, and $F$ is convex on $(a,b)$, then:\\n$$F\\left( \\int_X g \\, d\\mu\\right) \\leq \\int_X F \\circ g \\, d\\mu$$\\n\\nThis generalizes the discrete Jensen's inequality to the continuous setting using integration."
+                },
+                {
+                    id: 98,
+                    category: "Signed Measures",
+                    front: "State key properties of convex functions.",
+                    back: "For a function $F: (a,b) \\to \\mathbb{R}$:\\n\\n• $F$ is convex $\\Leftrightarrow$ for all $s \\leq s' < t \\leq t'$ in $(a,b)$:\\n$$\\frac{F(t)-F(s)}{t-s} \\leq \\frac{F(t')-F(s')}{t'-s'}$$\\n\\n• $F$ is convex $\\Leftrightarrow$ $F$ is absolutely continuous on every compact subinterval and $F'$ is increasing\\n\\n• If $F$ is convex and $t_0 \\in (a,b)$, then $\\exists \\beta \\in \\mathbb{R}$ such that $F(t) - F(t_0) \\geq \\beta(t - t_0)$ for all $t \\in (a,b)$"
+                },
+
+                // Point Set Topology
+                {
+                    id: 99,
+                    category: "Point Set Topology",
+                    front: "Define a topology on a set.",
+                    back: "Let $X$ be a nonempty set. A **topology** on $X$ is a family $\\mathcal{T}$ of subsets of $X$ such that:\\n\\n• $\\emptyset, X \\in \\mathcal{T}$\\n\\n• $\\mathcal{T}$ is closed under arbitrary unions\\n\\n• $\\mathcal{T}$ is closed under finite intersections\\n\\nThe pair $(X, \\mathcal{T})$ is called a **topological space**. Members of $\\mathcal{T}$ are called **open sets**, and their complements are **closed sets**."
+                },
+                {
+                    id: 100,
+                    category: "Point Set Topology",
+                    front: "Define interior, closure, and boundary of a set.",
+                    back: "If $A \\subset X$ in a topological space:\\n\\n• **Interior** $A^\\circ$: union of all open sets contained in $A$ (largest open set in $A$)\\n\\n• **Closure** $\\overline{A}$: intersection of all closed sets containing $A$ (smallest closed set containing $A$)\\n\\n• **Boundary** $\\partial A = \\overline{A} \\setminus A^\\circ = \\overline{A} \\cap \\overline{A^c}$\\n\\n**Properties**: $(A^\\circ)^c = \\overline{A^c}$ and $(\\overline{A})^c = (A^c)^\\circ$"
+                },
+                {
+                    id: 101,
+                    category: "Point Set Topology",
+                    front: "Define dense and nowhere dense sets.",
+                    back: "In a topological space $X$, a set $A \\subset X$ is:\\n\\n• **Dense** in $X$ if $\\overline{A} = X$\\n\\n• **Nowhere dense** if $(\\overline{A})^\\circ = \\emptyset$\\n\\nA dense set has closure equal to the whole space, while a nowhere dense set has closure with empty interior."
+                },
+                {
+                    id: 102,
+                    category: "Point Set Topology",
+                    front: "Define neighborhoods and accumulation points.",
+                    back: "In a topological space:\\n\\n• A **neighborhood** of $x$ (or $E$) is a set $A$ such that $x \\in A^\\circ$ (or $E \\subset A^\\circ$)\\n\\n• A set $A$ is open $\\Leftrightarrow$ it is a neighborhood of itself\\n\\n• A point $x$ is an **accumulation point** of $A$ if $A \\cap (U \\setminus \\{x\\}) \\neq \\emptyset$ for every neighborhood $U$ of $x$"
+                },
+                {
+                    id: 103,
+                    category: "Point Set Topology",
+                    front: "Give examples of common topologies.",
+                    back: "On any nonempty set $X$:\\n\\n• **Discrete topology**: $\\mathcal{P}(X)$ (all subsets are open)\\n\\n• **Trivial/indiscrete topology**: $\\{\\emptyset, X\\}$\\n\\n• **Cofinite topology** (if $X$ infinite): $\\{U \\subset X : U = \\emptyset \\text{ or } U^c \\text{ is finite}\\}$\\n\\n• **Metric topology**: collection of all open sets with respect to a metric\\n\\n• **Relative topology**: If $Y \\subset X$, then $\\mathcal{T}_Y = \\{U \\cap Y : U \\in \\mathcal{T}\\}$"
+                },
+                {
+                    id: 104,
+                    category: "Point Set Topology", 
+                    front: "Define weaker/stronger topologies and topology generation.",
+                    back: "• If $\\mathcal{T}_1 \\subseteq \\mathcal{T}_2$ are topologies on $X$, then $\\mathcal{T}_1$ is **weaker/coarser** than $\\mathcal{T}_2$, and $\\mathcal{T}_2$ is **stronger/finer**\\n\\n• If $\\mathcal{E} \\subset \\mathcal{P}(X)$, the **topology generated by $\\mathcal{E}$** is $\\mathcal{T}(\\mathcal{E}) =$ intersection of all topologies containing $\\mathcal{E}$ (weakest topology containing $\\mathcal{E}$)\\n\\n• $\\mathcal{T}(\\mathcal{E})$ consists of $\\emptyset$, $X$, and all unions of finite intersections of members of $\\mathcal{E}$"
+                },
+                {
+                    id: 105,
+                    category: "Point Set Topology",
+                    front: "Define bases and neighborhood bases for topologies.",
+                    back: "• A **neighborhood base** for topology $\\mathcal{T}$ at $x$ is a family $\\mathcal{N} \\subset \\mathcal{T}$ such that:\\n  - $x \\in V$ for all $V \\in \\mathcal{N}$\\n  - If $U \\in \\mathcal{T}$ and $x \\in U$, then $\\exists V \\in \\mathcal{N}$ with $x \\in V \\subseteq U$\\n\\n• A **base** for $\\mathcal{T}$ is a family $\\mathcal{B} \\subseteq \\mathcal{T}$ that contains a neighborhood base at each $x \\in X$\\n\\n• $\\mathcal{E}$ is a base for $\\mathcal{T} \\Leftrightarrow$ every nonempty $U \\in \\mathcal{T}$ is a union of members of $\\mathcal{E}$"
+                },
+                {
+                    id: 106,
+                    category: "Point Set Topology",
+                    front: "Define continuity for functions between topological spaces.",
+                    back: "Let $X$ and $Y$ be topological spaces and $f: X \\to Y$.\\n\\n• $f$ is **continuous** if $f^{-1}(V) \\subseteq X$ is open for every open $V \\subseteq Y$\\n\\n• $f$ is **continuous at $x$** if for every neighborhood $V$ of $f(x)$, there is a neighborhood $U$ of $x$ such that $f(U) \\subseteq V$\\n\\nEquivalently: $f^{-1}(V)$ is a neighborhood of $x$ for every neighborhood $V$ of $f(x)$"
+                },
+                {
+                    id: 107,
+                    category: "Point Set Topology",
+                    front: "Define weak topology and product topology.",
+                    back: "• If $X$ is a set and $\\{f_\\alpha: X \\to Y_\\alpha\\}_{\\alpha \\in A}$ are maps to topological spaces, the **weak topology** on $X$ is the weakest topology making all $f_\\alpha$ continuous\\n\\n• Generated by sets of the form $f_\\alpha^{-1}(U_\\alpha)$ where $U_\\alpha$ is open in $Y_\\alpha$\\n\\n• The **product topology** on $X = \\prod_\\alpha X_\\alpha$ is the weak topology generated by coordinate maps $\\{\\pi_\\alpha: X \\to X_\\alpha\\}$"
+                },
+                {
+                    id: 108,
+                    category: "Point Set Topology",
+                    front: "Define function spaces $B(X)$, $C(X)$, $BC(X)$ and the uniform norm.",
+                    back: "If $X$ is a topological space and $k = \\mathbb{R}$ or $\\mathbb{C}$:\\n\\n• $B(X,k) = \\{f: X \\to k \\mid f \\text{ is bounded}\\}$\\n\\n• $C(X,k) = \\{f: X \\to k \\mid f \\text{ is continuous}\\}$\\n\\n• $BC(X,k) = B(X,k) \\cap C(X,k)$\\n\\n**Uniform norm**: $\\|f\\|_u = \\sup\\{|f(x)| : x \\in X\\}$\\n\\n$BC(X)$ is a closed subspace of $B(X)$ in the uniform metric, hence complete."
+                },
+                {
+                    id: 109,
+                    category: "Point Set Topology",
+                    front: "Define normal spaces and state Urysohn's Lemma.",
+                    back: "A topological space is **normal** if:\\n\\n• **$T_1$**: singletons $\\{x\\}$ are closed\\n\\n• **Closed sets can be separated**: for disjoint closed sets $A$ and $B$, $\\exists$ disjoint open sets $U$ and $V$ with $A \\subset U$, $B \\subset V$\\n\\n**Urysohn's Lemma**: If $X$ is normal and $A$, $B$ are disjoint closed sets, then $\\exists f \\in C(X, [0,1])$ such that $f = 0$ on $A$ and $f = 1$ on $B$."
+                },
+                {
+                    id: 110,
+                    category: "Point Set Topology",
+                    front: "State the Tietze Extension Theorem.",
+                    back: "Let $X$ be a normal space. If $A$ is a closed subset of $X$ and $f \\in C(A, [a,b])$, then $\\exists F \\in C(X, [a,b])$ such that $F|_A = f$.\\n\\n**Corollary**: If $X$ is normal, $A \\subset X$ is closed, and $f \\in C(A)$, then $\\exists F \\in C(X)$ such that $F|_A = f$."
+                },
+                {
+                    id: 111,
+                    category: "Point Set Topology",
+                    front: "Define compactness and local compactness.",
+                    back: "• A topological space is **compact** if every open cover has a finite subcover\\n\\n• A topological space $X$ is **locally compact** if every point has a compact neighborhood\\n\\n**Key properties**:\\n• Closed subset of compact space is compact\\n• Compact subset of Hausdorff space is closed\\n• Every compact Hausdorff space is normal\\n• If $X$ is compact and $f: X \\to Y$ continuous, then $f(X)$ is compact"
+                },
+                {
+                    id: 112,
+                    category: "Point Set Topology",
+                    front: "Define support, compactly supported functions, and functions vanishing at infinity.",
+                    back: "If $X$ is a topological space and $f \\in C(X)$:\\n\\n• **Support** of $f$: $\\operatorname{supp}(f) =$ closure of $\\{x : f(x) \\neq 0\\}$\\n\\n• $f$ is **compactly supported** if $\\operatorname{supp}(f)$ is compact\\n  $C_c(X) = \\{f \\in C(X) : \\operatorname{supp}(f) \\text{ is compact}\\}$\\n\\n• $f$ **vanishes at infinity** if $\\forall \\epsilon > 0$, $\\{x : |f(x)| \\geq \\epsilon\\}$ is compact\\n  $C_0(X) = \\{f \\in C(X) : f \\text{ vanishes at infinity}\\}$\\n\\n**Relationship**: $C_c(X) \\subset C_0(X) \\subset BC(X)$"
+                },
+                {
+                    id: 113,
+                    category: "Point Set Topology",
+                    front: "State the relationship between $C_c(X)$ and $C_0(X)$ for LCH spaces.",
+                    back: "If $X$ is a locally compact Hausdorff (LCH) space, then $C_0(X)$ is the closure of $C_c(X)$ in the uniform metric.\\n\\nThat is: $\\overline{C_c(X)} = C_0(X)$ in the uniform norm.\\n\\nThis shows that compactly supported continuous functions are dense in the space of continuous functions vanishing at infinity."
                 }
             ];
 
@@ -705,7 +879,9 @@
                 "Signed Measures": "bg-purple-100 text-purple-800",
                 "Functional Analysis": "bg-red-100 text-red-800",
                 "Lp Spaces": "bg-yellow-100 text-yellow-800",
-                "Haar and Radon Measures": "bg-indigo-100 text-indigo-800"
+                "Haar and Radon Measures": "bg-indigo-100 text-indigo-800",
+                "Complex Measures": "bg-teal-100 text-teal-800",
+                "Point Set Topology": "bg-pink-100 text-pink-800"
             };
 
             function FlashcardApp() {
