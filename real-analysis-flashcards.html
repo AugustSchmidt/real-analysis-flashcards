@@ -639,7 +639,7 @@
                     id: 82,
                     category: "Lp Spaces",
                     front: "State the duality theorem for $L^p$ spaces.",
-                    back: "For $1 < p < \\infty$, $(L^p)^* \\cong L^q$ where $1/p + 1/q = 1$.\\n\\n Each $g \\in L^q$ defines $\\phi_g \\in (L^p)^*$ by $\\phi_g(f) := \\int fg \\, d\\mu$, and every element of $(L^p)^*$ arises this way."
+                    back: "For $1 < p < \\infty$, $(L^p)^* \\cong L^q$ where $1/p + 1/q = 1$.\\n\\n Each $g \\in L^q$ defines $\\phi_g \\in (L^p)^*$ by $\\phi_g(f) := \\int fg \\, d\\mu$, and every element of $(L^p)^*$ arises this way.\\n\\n**Special case**: When $\\mu$ is **$\\sigma$-finite**, $(L^1)^* \\cong L^\\infty$. Each $g \\in L^\\infty$ defines $\\phi_g \\in (L^1)^*$ by $\\phi_g(f) := \\int fg \\, d\\mu$, and every element of $(L^1)^*$ arises this way."
                 },
                 {
                     id: 83,
@@ -751,7 +751,7 @@
                     id: 94,
                     category: "Complex Measures",
                     front: "Define the total variation of a complex measure.",
-                    back: "The **total variation** of a complex measure $\\nu: \\Sigma \\to \\mathbb{C}$ is the positive measure $|\\nu|$ determined by the property that if $f = \\frac{d\\nu}{d\\mu}$ where $\\mu$ is a positive measure, then $|f| = \\frac{d|\\nu|}{d\\mu}$."
+                    back: "The **total variation** of a complex measure $\\mu\\colon \\Sigma \\rightarrow \\mathbb{C}$ can be defined in two equivalent ways:\\n\\n**Definition 1** (Radon-Nikodym): The positive measure $|\\mu|$ determined by the property that if $f = \\frac{d\\mu}{d\\nu}$ where $\\nu$ is a positive measure, then $|f| = \\frac{d|\\mu|}{d\\nu}$.\\n\\n**Definition 2** (Supremum): $$|\\mu|(E)\\defeq \\sup \\left\\{ \\sum_{i=1}^\\infty |\\mu(E_i)| \\colon \\{E_i\\} \\; \\text{is a countable partition of } E\\right\\}$$\\n\\n**Properties**:\\n\\n• $|\\mu|$ is the **smallest positive measure** such that $|\\mu(E)|\\leq |\\mu| (E), \\forall E\\in \\Sigma$\\n\\n• If $\\mu$ is finite, then $|\\mu|$ is finite with $|\\mu|(X) = \\sup \\left\\{ \\sum_{i=1}^\\infty |\\mu(E_i)| \\colon \\{E_i\\} \\; \\text{is a countable partition of } X\\right\\}$"
                 },
                 {
                     id: 95,
