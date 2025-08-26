@@ -785,7 +785,7 @@
                     id: 99,
                     category: "Point Set Topology",
                     front: "Define a topology on a set.",
-                    back: "Let $X$ be a nonempty set. A **topology** on $X$ is a family $\\mathcal{T}$ of subsets of $X$ such that:\\n\\n• $\\emptyset, X \\in \\mathcal{T}$\\n\\n• $\\mathcal{T}$ is closed under arbitrary unions\\n\\n• $\\mathcal{T}$ is closed under finite intersections\\n\\n The pair $(X, \\mathcal{T})$ is called a **topological space**. Members of $\\mathcal{T}$ are called **open sets**, and their complements are **closed sets**."
+                    back: "Let $X$ be a nonempty set. A **topology** on $X$ is a family $\\mathcal{T}$ of subsets of $X$ such that:\\n\\n• $\\emptyset, X \\in \\mathcal{T}$\\n\\n• $\\mathcal{T}$ is closed under arbitrary unions\\n\\n• $\\mathcal{T}$ is closed under f\inite intersections\\n\\n The pair $(X, \\mathcal{T})$ is called a **topological space**. Members of $\\mathcal{T}$ are called **open sets**, and their complements are **closed sets**."
                 },
                 {
                     id: 100,
@@ -1637,10 +1637,6 @@
                         )
                     ),
 
-                    // Stats Footer
-                    React.createElement('div', { className: `mt-4 text-center text-sm ${themeClasses.text.secondary}` },
-                        `Total Cards: ${flashcardsData.length} | Filtered: ${filteredCards.length}`
-                    ),
 
                     // Celebration Animation
                     showCelebration && React.createElement('div', { 
