@@ -1638,23 +1638,8 @@
                                 "Previous"
                             ),
 
-                            // Center: Show/Next buttons
-                            React.createElement('div', { className: "flex gap-3" },
-                                !showAnswer && React.createElement('button', {
-                                    onClick: () => setShowAnswer(true),
-                                    className: `${themeClasses.button.primary} text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2`
-                                },
-                                    React.createElement(BookOpen, null),
-                                    "Show Answer"
-                                ),
-                                showAnswer && React.createElement('button', {
-                                    onClick: () => setHideAnswerText(!hideAnswerText),
-                                    className: `${themeClasses.button.secondary} font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2`
-                                },
-                                    hideAnswerText ? React.createElement(Eye, null) : React.createElement(EyeOff, null),
-                                    hideAnswerText ? "Show" : "Hide"
-                                )
-                            ),
+                            // Center: Empty space for symmetry
+                            React.createElement('div', { className: "flex-1" }),
 
                             // Right: Next button
                             React.createElement('button', {
@@ -1669,29 +1654,50 @@
                             )
                         ),
 
-                        // Progress Tracking
-                        showAnswer && React.createElement('div', { className: "mt-6 flex justify-center gap-4" },
-                            React.createElement('button', {
-                                onClick: () => markCard(false),
-                                className: `flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                                    progress[currentCard.id] === false 
-                                        ? `${themeClasses.button.redActive} text-white font-semibold` 
-                                        : `${themeClasses.button.red} ${isDarkMode ? 'text-red-300' : 'text-red-600'}`
-                                }`
+                        // Answer Controls and Progress Tracking
+                        React.createElement('div', { className: "mt-6 flex justify-center gap-4" },
+                            // Show Answer button (when answer not shown)
+                            !showAnswer && React.createElement('button', {
+                                onClick: () => setShowAnswer(true),
+                                className: `${themeClasses.button.primary} text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2`
                             },
-                                React.createElement(X, { size: 16 }),
-                                "Incorrect"
+                                React.createElement(BookOpen, null),
+                                "Show Answer"
                             ),
-                            React.createElement('button', {
-                                onClick: () => markCard(true),
-                                className: `flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                                    progress[currentCard.id] === true 
-                                        ? `${themeClasses.button.greenActive} text-white font-semibold` 
-                                        : `${themeClasses.button.green} ${isDarkMode ? 'text-green-300' : 'text-green-600'}`
-                                }`
+
+                            // Hide/Show answer text button (when answer is shown)
+                            showAnswer && React.createElement('button', {
+                                onClick: () => setHideAnswerText(!hideAnswerText),
+                                className: `${themeClasses.button.secondary} font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2`
                             },
-                                React.createElement(Check, { size: 16 }),
-                                "Correct"
+                                hideAnswerText ? React.createElement(Eye, null) : React.createElement(EyeOff, null),
+                                hideAnswerText ? "Show" : "Hide"
+                            ),
+
+                            // Progress tracking buttons (when answer is shown)
+                            showAnswer && React.createElement(React.Fragment, null,
+                                React.createElement('button', {
+                                    onClick: () => markCard(false),
+                                    className: `flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                                        progress[currentCard.id] === false 
+                                            ? `${themeClasses.button.redActive} text-white font-semibold` 
+                                            : `${themeClasses.button.red} ${isDarkMode ? 'text-red-300' : 'text-red-600'}`
+                                    }`
+                                },
+                                    React.createElement(X, { size: 16 }),
+                                    "Incorrect"
+                                ),
+                                React.createElement('button', {
+                                    onClick: () => markCard(true),
+                                    className: `flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                                        progress[currentCard.id] === true 
+                                            ? `${themeClasses.button.greenActive} text-white font-semibold` 
+                                            : `${themeClasses.button.green} ${isDarkMode ? 'text-green-300' : 'text-green-600'}`
+                                    }`
+                                },
+                                    React.createElement(Check, { size: 16 }),
+                                    "Correct"
+                                )
                             )
                         )
                     ),
