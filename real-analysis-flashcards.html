@@ -1422,9 +1422,9 @@
                         nav: isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-600 hover:bg-gray-700',
                         purple: isDarkMode ? 'bg-purple-700 hover:bg-purple-800' : 'bg-purple-600 hover:bg-purple-700',
                         green: isDarkMode ? 'bg-green-700 hover:bg-green-800' : 'bg-green-100 hover:bg-green-200',
-                        greenActive: isDarkMode ? 'bg-green-800' : 'bg-green-600',
+                        greenActive: isDarkMode ? 'bg-green-600 shadow-lg shadow-green-500/50' : 'bg-green-600 shadow-lg shadow-green-500/30',
                         red: isDarkMode ? 'bg-red-700 hover:bg-red-800' : 'bg-red-100 hover:bg-red-200',
-                        redActive: isDarkMode ? 'bg-red-800' : 'bg-red-600'
+                        redActive: isDarkMode ? 'bg-red-600 shadow-lg shadow-red-500/50' : 'bg-red-600 shadow-lg shadow-red-500/30'
                     },
                     progressBar: isDarkMode ? 'bg-gray-700' : 'bg-gray-200',
                     progressFill: isDarkMode ? 'bg-blue-500' : 'bg-blue-600'
@@ -1499,20 +1499,17 @@
                                 ),
                                 React.createElement('button', {
                                     onClick: () => setShowProgress(!showProgress),
-                                    className: `flex items-center gap-2 px-3 py-1 ${themeClasses.button.secondary} rounded-lg text-sm ${themeClasses.text.primary}`
+                                    className: `flex items-center gap-2 px-3 py-1 ${themeClasses.button.purple} text-white rounded-lg text-sm transition-colors`
                                 },
                                     React.createElement(showProgress ? EyeOff : Eye, { size: 16 }),
                                     "Progress"
-                                )
-                            )
-                        ),
-
-                        // Progress Stats
-                        showProgress && React.createElement('div', { className: `mt-2 p-3 ${themeClasses.card} rounded-lg` },
-                            React.createElement('div', { className: `text-sm ${themeClasses.text.secondary}` },
-                                `Progress: ${correct}/${total} correct`,
-                                total > 0 && React.createElement('span', { className: "ml-2" },
-                                    `(${Math.round((correct / total) * 100)}%)`
+                                ),
+                                React.createElement('button', {
+                                    onClick: resetDeck,
+                                    className: `flex items-center gap-2 px-3 py-1 ${themeClasses.button.purple} text-white rounded-lg text-sm transition-colors`
+                                },
+                                    React.createElement(RotateCcw, { size: 16 }),
+                                    "Reset"
                                 )
                             )
                         )
@@ -1557,9 +1554,9 @@
                         showAnswer && React.createElement('div', { className: "mt-6 flex justify-center gap-4" },
                             React.createElement('button', {
                                 onClick: () => markCard(false),
-                                className: `flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                                className: `flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
                                     progress[currentCard.id] === false 
-                                        ? `${themeClasses.button.redActive} text-white` 
+                                        ? `${themeClasses.button.redActive} text-white font-semibold` 
                                         : `${themeClasses.button.red} ${isDarkMode ? 'text-red-300' : 'text-red-600'}`
                                 }`
                             },
@@ -1568,9 +1565,9 @@
                             ),
                             React.createElement('button', {
                                 onClick: () => markCard(true),
-                                className: `flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                                className: `flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
                                     progress[currentCard.id] === true 
-                                        ? `${themeClasses.button.greenActive} text-white` 
+                                        ? `${themeClasses.button.greenActive} text-white font-semibold` 
                                         : `${themeClasses.button.green} ${isDarkMode ? 'text-green-300' : 'text-green-600'}`
                                 }`
                             },
@@ -1589,14 +1586,6 @@
                         },
                             React.createElement(ChevronLeft, { size: 20 }),
                             "Previous"
-                        ),
-
-                        React.createElement('button', {
-                            onClick: resetDeck,
-                            className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.purple} text-white rounded-lg transition-colors`
-                        },
-                            React.createElement(RotateCcw, { size: 20 }),
-                            "Reset"
                         ),
 
                         currentIndex === filteredCards.length - 1 
@@ -1634,6 +1623,13 @@
                                 className: `${themeClasses.progressFill} h-2 rounded-full transition-all duration-300`,
                                 style: { width: `${((currentIndex + 1) / filteredCards.length) * 100}%` }
                             })
+                        )
+                    ),
+
+                    // Progress stats (when toggled)
+                    showProgress && React.createElement('div', { className: `${themeClasses.card} rounded-lg p-3 mt-4` },
+                        React.createElement('div', { className: `text-center ${themeClasses.text.primary}` },
+                            `Progress: ${correct}/${total} correct${total > 0 ? ` (${Math.round((correct / total) * 100)}%)` : ''}`
                         )
                     ),
 
