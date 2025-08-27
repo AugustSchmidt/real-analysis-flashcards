@@ -1624,7 +1624,7 @@
                             )
                         ),
 
-                        // Control buttons
+                        // Control buttons - Navigation and Answer Controls
                         React.createElement('div', { className: "flex justify-between items-center" },
                             // Left: Previous button
                             React.createElement('button', {
@@ -1638,43 +1638,18 @@
                                 "Previous"
                             ),
 
-                            // Center: Empty space for symmetry
-                            React.createElement('div', { className: "flex-1" }),
+                            // Center: Answer control buttons (when answer is shown)
+                            showAnswer && React.createElement('div', { className: "flex gap-4" },
+                                // Hide/Show answer text button
+                                React.createElement('button', {
+                                    onClick: () => setHideAnswerText(!hideAnswerText),
+                                    className: `${themeClasses.button.secondary} font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2`
+                                },
+                                    hideAnswerText ? React.createElement(Eye, null) : React.createElement(EyeOff, null),
+                                    hideAnswerText ? "Show" : "Hide"
+                                ),
 
-                            // Right: Next button
-                            React.createElement('button', {
-                                onClick: nextCard,
-                                disabled: currentIndex === filteredCards.length - 1,
-                                className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.nav} text-white rounded-lg transition-colors ${
-                                    currentIndex === filteredCards.length - 1 ? 'opacity-50 cursor-not-allowed' : ''
-                                }`
-                            },
-                                "Next",
-                                React.createElement(ChevronRight, null)
-                            )
-                        ),
-
-                        // Answer Controls and Progress Tracking
-                        React.createElement('div', { className: "mt-6 flex justify-center gap-4" },
-                            // Show Answer button (when answer not shown)
-                            !showAnswer && React.createElement('button', {
-                                onClick: () => setShowAnswer(true),
-                                className: `${themeClasses.button.primary} text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2`
-                            },
-                                "Show Answer"
-                            ),
-
-                            // Hide/Show answer text button (when answer is shown)
-                            showAnswer && React.createElement('button', {
-                                onClick: () => setHideAnswerText(!hideAnswerText),
-                                className: `${themeClasses.button.secondary} font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2`
-                            },
-                                hideAnswerText ? React.createElement(Eye, null) : React.createElement(EyeOff, null),
-                                hideAnswerText ? "Show" : "Hide"
-                            ),
-
-                            // Progress tracking buttons (when answer is shown)
-                            showAnswer && React.createElement(React.Fragment, null,
+                                // Progress tracking buttons
                                 React.createElement('button', {
                                     onClick: () => markCard(false),
                                     className: `flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
@@ -1695,6 +1670,31 @@
                                 },
                                     "Correct"
                                 )
+                            ),
+
+                            // Center: Empty space when answer not shown
+                            !showAnswer && React.createElement('div', { className: "flex-1" }),
+
+                            // Right: Next button
+                            React.createElement('button', {
+                                onClick: nextCard,
+                                disabled: currentIndex === filteredCards.length - 1,
+                                className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.nav} text-white rounded-lg transition-colors ${
+                                    currentIndex === filteredCards.length - 1 ? 'opacity-50 cursor-not-allowed' : ''
+                                }`
+                            },
+                                "Next",
+                                React.createElement(ChevronRight, null)
+                            )
+                        ),
+
+                        // Show Answer button (when answer not shown)
+                        !showAnswer && React.createElement('div', { className: "mt-6 flex justify-center" },
+                            React.createElement('button', {
+                                onClick: () => setShowAnswer(true),
+                                className: `${themeClasses.button.primary} text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2`
+                            },
+                                "Show Answer"
                             )
                         )
                     ),
