@@ -1700,45 +1700,6 @@
                         )
                     ),
 
-                    // Navigation Controls
-                    React.createElement('div', { className: "flex justify-between items-center" },
-                        React.createElement('button', {
-                            onClick: prevCard,
-                            disabled: currentIndex === 0,
-                            className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.nav} text-white rounded-lg disabled:${isDarkMode ? 'bg-gray-800' : 'bg-gray-300'} disabled:cursor-not-allowed transition-colors`
-                        },
-                            React.createElement(ChevronLeft, { size: 20 }),
-                            "Previous"
-                        ),
-
-                        currentIndex === filteredCards.length - 1 
-                            ? React.createElement('button', {
-                                onClick: () => {
-                                    // Trigger celebration and completion logic
-                                    setDeckCompleted(true);
-                                    triggerCelebration();
-                                    
-                                    const incorrectCards = getIncorrectCards();
-                                    if (incorrectCards.length > 0 && !reviewMode) {
-                                        setTimeout(() => {
-                                            setShowReviewPrompt(true);
-                                        }, 1500);
-                                    }
-                                },
-                                className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.primary} text-white rounded-lg transition-colors`
-                            },
-                                "Finish Deck 🎉",
-                                React.createElement(Check, { size: 20 })
-                            )
-                            : React.createElement('button', {
-                                onClick: nextCard,
-                                className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.nav} text-white rounded-lg transition-colors`
-                            },
-                                "Next",
-                                React.createElement(ChevronRight, { size: 20 })
-                            )
-                    ),
-
                     // Progress Bar
                     React.createElement('div', { className: "mt-6" },
                         React.createElement('div', { className: `${themeClasses.progressBar} rounded-full h-2` },
