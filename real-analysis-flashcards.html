@@ -169,7 +169,7 @@
                 ENABLE_SHUFFLE: true,
                 ENABLE_CATEGORY_FILTER: true,
                 ENABLE_CELEBRATION: true,
-                ENABLE_HIDE_ANSWER_TEXT: false, // Not implemented in this version
+                ENABLE_HIDE_ANSWER_TEXT: true,
                 ENABLE_REVIEW_MODE: false, // Not implemented in this version
                 
                 // UI settings
@@ -956,6 +956,7 @@
             function FlashcardApp() {
                 const [currentIndex, setCurrentIndex] = useState(0);
                 const [showAnswer, setShowAnswer] = useState(false);
+                const [hideAnswerText, setHideAnswerText] = useState(false);
                 const [selectedCategories, setSelectedCategories] = useState(new Set(Object.keys(categoryColors)));
                 const [filteredCards, setFilteredCards] = useState(flashcardsData);
                 const [progress, setProgress] = useState({});
@@ -1001,13 +1002,14 @@
                         }
                     };
                     renderMath();
-                }, [currentIndex, showAnswer, filteredCards]);
+                }, [currentIndex, showAnswer, hideAnswerText, filteredCards]);
 
                 useEffect(() => {
                     const filtered = flashcardsData.filter(card => selectedCategories.has(card.category));
                     setFilteredCards(filtered);
                     setCurrentIndex(0);
                     setShowAnswer(false);
+                    setHideAnswerText(false);
                     setIsShuffled(false);
                     setShuffledIndices([]);
                     setReviewMode(false);
@@ -1038,6 +1040,7 @@
                     if (currentIndex < filteredCards.length - 1) {
                         setCurrentIndex(currentIndex + 1);
                         setShowAnswer(false);
+                        setHideAnswerText(false);
                     } else {
                         // Reached end of deck
                         setDeckCompleted(true);
@@ -1057,12 +1060,14 @@
                     if (currentIndex > 0) {
                         setCurrentIndex(currentIndex - 1);
                         setShowAnswer(false);
+                        setHideAnswerText(false);
                     }
                 };
 
                 const resetDeck = () => {
                     setCurrentIndex(0);
                     setShowAnswer(false);
+                    setHideAnswerText(false);
                     setIsShuffled(false);
                     setShuffledIndices([]);
                     setDeckCompleted(false);
@@ -1078,6 +1083,7 @@
                         setIsShuffled(true);
                         setCurrentIndex(0);
                         setShowAnswer(false);
+                        setHideAnswerText(false);
                     }
                 };
 
@@ -1269,7 +1275,7 @@
                     return confettiElements;
                 };
 
-                const formatText = (text) => {
+                const formatText = (text, cardId) => {
                     if (!text) return '';
                     
                     // Convert \\n to actual newlines, but be careful not to break LaTeX commands
@@ -1339,7 +1345,7 @@
                         
                         // Process block line by line
                         return block.split('\n').map((line, lineIndex) => {
-                            const key = `${blockIndex}-${lineIndex}`;
+                            const key = `card-${cardId}-${blockIndex}-${lineIndex}`;
                             
                             // Skip empty lines but add spacing
                             if (line.trim() === '') {
@@ -1361,7 +1367,7 @@
                                         parts.push(text.substring(lastIndex, match.index));
                                     }
                                     // Add the bold part
-                                    parts.push(React.createElement('strong', { key: `bold-${match.index}` }, match[1]));
+                                    parts.push(React.createElement('strong', { key: `card-${cardId}-bold-${match.index}` }, match[1]));
                                     lastIndex = match.index + match[0].length;
                                 }
                                 // Add remaining text
@@ -1597,29 +1603,69 @@
                             }, currentCard.category)
                         ),
 
-                        // Card Content
-                        React.createElement('div', { className: "flex-1 flex flex-col justify-center" },
-                            React.createElement('div', { className: "text-center mb-6" },
-                                React.createElement('div', { className: `text-2xl font-bold ${themeClasses.text.primary} mb-4` },
-                                    showAnswer ? 'Answer' : 'Question'
-                                ),
-                                React.createElement('div', { 
-                                    className: `text-lg ${themeClasses.text.primary} text-left ${themeClasses.cardContent} p-6 rounded-lg tex2jax_process`,
-                                    key: `card-content-${currentCard.id}-${showAnswer}` // Force re-render on content change
+                        // Question (always shown when answer is revealed)
+                        React.createElement('div', { className: `${themeClasses.cardContent} rounded-lg p-4 mb-4` },
+                            React.createElement('h2', { className: `text-xl font-semibold ${themeClasses.text.primary} mb-4` }, 
+                                "Question:"),
+                            React.createElement('div', { className: `${themeClasses.text.primary} text-lg leading-relaxed` },
+                                formatText(currentCard.front, currentCard.id)
+                            )
+                        ),
+
+                        // Answer (when revealed)
+                        showAnswer && React.createElement('div', { className: `${themeClasses.cardContent} rounded-lg p-4 mb-4` },
+                            React.createElement('h2', { className: `text-xl font-semibold ${themeClasses.text.primary} mb-4` }, 
+                                "Answer:"),
+                            !hideAnswerText && React.createElement('div', { className: `${themeClasses.text.primary} text-lg leading-relaxed` },
+                                formatText(currentCard.back, currentCard.id)
+                            ),
+                            hideAnswerText && React.createElement('div', { className: `${themeClasses.text.secondary} text-center py-8 italic` },
+                                "Answer is hidden. Click 'Show' to reveal it."
+                            )
+                        ),
+
+                        // Control buttons
+                        React.createElement('div', { className: "flex justify-between items-center" },
+                            // Left: Previous button
+                            React.createElement('button', {
+                                onClick: prevCard,
+                                disabled: currentIndex === 0,
+                                className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.nav} text-white rounded-lg transition-colors ${
+                                    currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                                }`
+                            },
+                                React.createElement(ChevronLeft, null),
+                                "Previous"
+                            ),
+
+                            // Center: Show/Next buttons
+                            React.createElement('div', { className: "flex gap-3" },
+                                !showAnswer && React.createElement('button', {
+                                    onClick: () => setShowAnswer(true),
+                                    className: `${themeClasses.button.primary} text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2`
                                 },
-                                    formatText(showAnswer ? currentCard.back : currentCard.front)
+                                    React.createElement(BookOpen, null),
+                                    "Show Answer"
+                                ),
+                                showAnswer && React.createElement('button', {
+                                    onClick: () => setHideAnswerText(!hideAnswerText),
+                                    className: `${themeClasses.button.secondary} font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2`
+                                },
+                                    hideAnswerText ? React.createElement(Eye, null) : React.createElement(EyeOff, null),
+                                    hideAnswerText ? "Show" : "Hide"
                                 )
                             ),
 
-                            // Show/Hide Answer Button
-                            React.createElement('div', { className: "text-center" },
-                                React.createElement('button', {
-                                    onClick: () => setShowAnswer(!showAnswer),
-                                    className: `${themeClasses.button.primary} text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center gap-2 mx-auto`
-                                },
-                                    React.createElement(BookOpen, { size: 20 }),
-                                    showAnswer ? 'Hide Answer' : 'Show Answer'
-                                )
+                            // Right: Next button
+                            React.createElement('button', {
+                                onClick: nextCard,
+                                disabled: currentIndex === filteredCards.length - 1,
+                                className: `flex items-center gap-2 px-4 py-2 ${themeClasses.button.nav} text-white rounded-lg transition-colors ${
+                                    currentIndex === filteredCards.length - 1 ? 'opacity-50 cursor-not-allowed' : ''
+                                }`
+                            },
+                                "Next",
+                                React.createElement(ChevronRight, null)
                             )
                         ),
 
