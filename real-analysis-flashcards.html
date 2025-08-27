@@ -4,9 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Analysis Flashcards</title>
+    <!-- 
+        Real Analysis Flashcards - Production Ready
+        
+        A fully self-contained, interactive flashcard application for studying 
+        Real Analysis concepts. Built with React 18, MathJax 3, and Tailwind CSS.
+        
+        Features:
+        - 91+ flashcards covering comprehensive Real Analysis topics
+        - Dark/Light theme toggle
+        - Progress tracking with visual feedback
+        - Category filtering and shuffle mode
+        - MathJax rendering for complex mathematical expressions
+        - Responsive design for all devices
+        - Local storage persistence
+        
+        To customize for other subjects:
+        1. Update the CONFIG object below
+        2. Replace flashcardsData with your content
+        3. Modify categoryColors for your categories
+        4. Update MathJax macros if needed
+    -->
+    <meta name="description" content="Interactive flashcards for studying Real Analysis concepts including measure theory, integration, functional analysis, and more.">
+    <meta name="keywords" content="real analysis, mathematics, flashcards, study tools, measure theory, functional analysis">
+    <meta name="author" content="Real Analysis Study Tools">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script>
         window.MathJax = {
@@ -110,7 +134,12 @@
 </head>
 <body>
     <div id="root">
-        <div class="loading">Loading comprehensive flashcards...</div>
+        <div class="loading">
+            <div>📚 Loading Real Analysis Flashcards...</div>
+            <div style="margin-top: 10px; font-size: 14px; color: #888;">
+                Setting up React components and MathJax rendering...
+            </div>
+        </div>
     </div>
 
     <script>
@@ -126,6 +155,37 @@
         try {
             const { useState, useEffect } = React;
 
+            // ========================================
+            // CONFIGURATION - Customize your flashcard app here
+            // ========================================
+            const CONFIG = {
+                // App metadata
+                APP_TITLE: 'Real Analysis Flashcards',
+                APP_DESCRIPTION: 'Interactive flashcards for Real Analysis study',
+                
+                // Features
+                ENABLE_DARK_MODE: true,
+                ENABLE_PROGRESS_TRACKING: true,
+                ENABLE_SHUFFLE: true,
+                ENABLE_CATEGORY_FILTER: true,
+                ENABLE_CELEBRATION: true,
+                ENABLE_HIDE_ANSWER_TEXT: false, // Not implemented in this version
+                ENABLE_REVIEW_MODE: false, // Not implemented in this version
+                
+                // UI settings
+                CARDS_PER_PAGE: 1,
+                AUTO_SAVE_PROGRESS: true,
+                CONFETTI_DURATION: 2500,
+                
+                // Local storage keys (change if you want separate storage)
+                STORAGE_PREFIX: 'real_analysis_flashcards_',
+                
+                // MathJax settings
+                MATHJAX_MACROS: {
+                    // Add custom macros here if needed
+                }
+            };
+
             // Simple icons as text
             const ChevronLeft = () => '‹';
             const ChevronRight = () => '›';
@@ -139,6 +199,9 @@
             const Moon = () => '🌙';
             const Sun = () => '☀️';
 
+            // ========================================
+            // FLASHCARDS DATA
+            // ========================================
             const flashcardsData = [
                 // Section 1: Measures
                 {
@@ -873,6 +936,9 @@
                 }
             ];
 
+            // ========================================
+            // UI CONFIGURATION & THEME
+            // ========================================
             const categoryColors = {
                 "Measures": "bg-blue-100 text-blue-800",
                 "Integration": "bg-green-100 text-green-800", 
@@ -884,6 +950,9 @@
                 "Point Set Topology": "bg-pink-100 text-pink-800"
             };
 
+            // ========================================
+            // MAIN FLASHCARD APPLICATION COMPONENT
+            // ========================================
             function FlashcardApp() {
                 const [currentIndex, setCurrentIndex] = useState(0);
                 const [showAnswer, setShowAnswer] = useState(false);
@@ -947,6 +1016,10 @@
                     setShowCelebration(false);
                 }, [selectedCategories]);
 
+                // ========================================
+                // UTILITY FUNCTIONS
+                // ========================================
+                
                 // Fisher-Yates shuffle algorithm
                 const shuffleArray = (array) => {
                     const shuffled = [...array];
@@ -1672,8 +1745,18 @@
             ReactDOM.render(React.createElement(FlashcardApp), document.getElementById('root'));
 
         } catch (error) {
-            console.error('Error in React app:', error);
-            document.getElementById('root').innerHTML = '<div class="error">Error loading app: ' + error.message + '</div>';
+            console.error('Flashcard App Error:', error);
+            const errorHtml = `
+                <div class="error">
+                    <h2>Application Error</h2>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Please refresh the page to try again. If the problem persists, check the browser console for more details.</p>
+                    <button onclick="window.location.reload()" style="margin-top: 10px; padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Reload Page
+                    </button>
+                </div>
+            `;
+            document.getElementById('root').innerHTML = errorHtml;
         }
     </script>
 </body>
