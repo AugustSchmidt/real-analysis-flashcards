@@ -1341,10 +1341,147 @@
                         
                         // Handle display math blocks ($$...$$)
                         if (block.includes('$$')) {
+                            // Define processBoldText function locally for display math blocks
+                            const processBoldText = (text) => {
+                                if (!text || typeof text !== 'string') return text;
+                                
+                                const parts = [];
+                                let lastIndex = 0;
+                                const boldRegex = /\*\*(.*?)\*\*/g;
+                                let match;
+                                
+                                while ((match = boldRegex.exec(text)) !== null) {
+                                    // Add text before the bold part
+                                    if (match.index > lastIndex) {
+                                        parts.push(text.substring(lastIndex, match.index));
+                                    }
+                                    // Add the bold part
+                                    parts.push(React.createElement('strong', { key: `card-${cardId}-bold-${match.index}` }, match[1]));
+                                    lastIndex = match.index + match[0].length;
+                                }
+                                // Add remaining text
+                                if (lastIndex < text.length) {
+                                    parts.push(text.substring(lastIndex));
+                                }
+                                
+                                return parts.length > 1 ? parts : text;
+                            };
+                            
+                            // Check if this block has content before/after the display math that needs bold processing
+                            const lines = block.split('\n');
+                            const processedElements = [];
+                            
+                            for (let i = 0; i < lines.length; i++) {
+                                const line = lines[i];
+                                if (line.includes('$$')) {
+                                    // This line contains display math
+                                    const parts = line.split('$$');
+                                    if (parts.length === 3) {
+                                        // Format: text $$math$$ text
+                                        const beforeMath = parts[0];
+                                        const mathContent = parts[1];
+                                        const afterMath = parts[2];
+                                        
+                                        // Check if the line before math is a bullet point
+                                        const bulletMatch = beforeMath.match(/^(\s*)(•|\*|-)\s+(.*)$/);
+                                        if (bulletMatch) {
+                                            // This is a bullet point with display math
+                                            const bulletContent = bulletMatch[3];
+                                            const lineElements = [];
+                                            
+                                            // Process the bullet content before math
+                                            const boldProcessed = processBoldText(bulletContent);
+                                            if (Array.isArray(boldProcessed)) {
+                                                lineElements.push(...boldProcessed);
+                                            } else {
+                                                lineElements.push(boldProcessed);
+                                            }
+                                            
+                                            // Add the display math
+                                            lineElements.push('$$' + mathContent + '$$');
+                                            
+                                            // Add any text after math
+                                            if (afterMath) {
+                                                const boldProcessed = processBoldText(afterMath);
+                                                if (Array.isArray(boldProcessed)) {
+                                                    lineElements.push(...boldProcessed);
+                                                } else {
+                                                    lineElements.push(boldProcessed);
+                                                }
+                                            }
+                                            
+                                            // Create bullet point structure
+                                            processedElements.push(React.createElement('div', { 
+                                                key: `line-${i}`, 
+                                                className: "mb-2 flex items-start" 
+                                            }, [
+                                                React.createElement('span', { 
+                                                    key: 'bullet',
+                                                    className: "mr-3 flex-shrink-0 text-blue-600" 
+                                                }, '•'),
+                                                React.createElement('div', { 
+                                                    key: 'content',
+                                                    className: "flex-1"
+                                                }, lineElements)
+                                            ]));
+                                        } else {
+                                            // Regular line with display math (not a bullet)
+                                            const lineElements = [];
+                                            if (beforeMath) {
+                                                const boldProcessed = processBoldText(beforeMath);
+                                                if (Array.isArray(boldProcessed)) {
+                                                    lineElements.push(...boldProcessed);
+                                                } else {
+                                                    lineElements.push(boldProcessed);
+                                                }
+                                            }
+                                            lineElements.push('$$' + mathContent + '$$');
+                                            if (afterMath) {
+                                                const boldProcessed = processBoldText(afterMath);
+                                                if (Array.isArray(boldProcessed)) {
+                                                    lineElements.push(...boldProcessed);
+                                                } else {
+                                                    lineElements.push(boldProcessed);
+                                                }
+                                            }
+                                            
+                                            processedElements.push(React.createElement('div', { key: `line-${i}`, className: "mb-1" }, lineElements));
+                                        }
+                                    } else {
+                                        // Line is pure display math or complex case - keep as is
+                                        processedElements.push(React.createElement('div', { key: `line-${i}`, className: "text-center mb-4" }, line));
+                                    }
+                                } else {
+                                    // Check if this is a bullet point line
+                                    const bulletMatch = line.match(/^(\s*)(•|\*|-)\s+(.*)$/);
+                                    if (bulletMatch) {
+                                        // This is a bullet point - apply bullet styling
+                                        const boldProcessed = processBoldText(bulletMatch[3]);
+                                        processedElements.push(React.createElement('div', { 
+                                            key: `line-${i}`, 
+                                            className: "mb-2 flex items-start" 
+                                        }, [
+                                            React.createElement('span', { 
+                                                key: 'bullet',
+                                                className: "mr-3 flex-shrink-0 text-blue-600" 
+                                            }, '•'),
+                                            React.createElement('div', { 
+                                                key: 'content',
+                                                className: "flex-1"
+                                            }, boldProcessed)
+                                        ]));
+                                    } else {
+                                        // Regular line, process bold formatting
+                                        const boldProcessed = processBoldText(line);
+                                        processedElements.push(React.createElement('div', { key: `line-${i}`, className: "mb-1" }, boldProcessed));
+                                    }
+                                }
+                            }
+                            
                             return React.createElement('div', { 
                                 key: blockIndex, 
-                                className: "mb-4 text-center" 
-                            }, block);
+                                className: "mb-4" 
+                            }, processedElements);
                         }
                         
                         // Process block line by line
@@ -1362,7 +1499,7 @@
                                 
                                 const parts = [];
                                 let lastIndex = 0;
-                                const boldRegex = /\*\*([^*]+)\*\*/g;
+                                const boldRegex = /\*\*(.*?)\*\*/g;
                                 let match;
                                 
                                 while ((match = boldRegex.exec(text)) !== null) {
